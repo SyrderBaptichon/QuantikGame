@@ -46,22 +46,22 @@ class ArrayPieceQuantik implements ArrayAccess,Countable
         return count($this->piecesQuantik);
     }
 
-    public function getPieceQuantik($pos) : PieceQuantik
+    public function getPieceQuantik(int $pos) : PieceQuantik
     {
         return $this->offsetGet($pos);
     }
 
-    public function setPieceQuantik($pos, $piece) : void
+    public function setPieceQuantik(int $pos, PieceQuantik $piece) : void
     {
         $this->offsetSet($pos,$piece);
     }
 
-    public function addPieceQuantik($piece) : void
+    public function addPieceQuantik(PieceQuantik $piece) : void
     {
         $this->piecesQuantik[] = $piece;
     }
 
-    public function removePieceQuantik($pos) :void
+    public function removePieceQuantik(int $pos) :void
     {
         unset($this->piecesQuantik[$pos]);
         $this->piecesQuantik = array_values($this->piecesQuantik);
