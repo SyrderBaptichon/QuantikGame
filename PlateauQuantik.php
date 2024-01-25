@@ -28,13 +28,73 @@ class PlateauQuantik
 
     public function setPiece(int $rowNum, int $colNum, PieceQuantik $p): void
     {
-        $index = ($rowNum - 1) * self::$NBCOLS + ($colNum);
+        $index = ($rowNum - 1) * self::$NBCOLS + ($colNum-1);
         $this->cases[$index] = $p;
     }
 
     public function getRow(int $numRow): ArrayPieceQuantik
     {
+        $i = new ArrayPieceQuantik();
+        for($y=0;$y<self::$NBROWS;$y++){
+            $i[]=$this->getPiece($numRow,$y);
+        }
+        return $i;
+    }
 
+    public function getCol(int $numCol): ArrayPieceQuantik
+    {
+        $i = new ArrayPieceQuantik();
+        for($y=1;$y<=self::$NBCOLS;$y++){
+            $i->addPieceQuantik($this->getPiece($y,$numCol));
+        }
+        return $i;
+    }
+
+    public function getCorner(int $dir): ArrayPieceQuantik
+    {
+        $i=new ArrayPieceQuantik();
+        if($dir==self::$NW){
+            $i->addPieceQuantik($this->getPiece(1,1));
+            $i->addPieceQuantik($this->getPiece(1,2));
+            $i->addPieceQuantik($this->getPiece(2,1));
+            $i->addPieceQuantik($this->getPiece(2,2));
+        } elseif($dir==self::$NE){
+            $i->addPieceQuantik($this->getPiece(1,3));
+            $i->addPieceQuantik($this->getPiece(1,4));
+            $i->addPieceQuantik($this->getPiece(2,3));
+            $i->addPieceQuantik($this->getPiece(2,4));
+        } elseif($dir==self::$SW){
+            $i->addPieceQuantik($this->getPiece(3,1));
+            $i->addPieceQuantik($this->getPiece(3,2));
+            $i->addPieceQuantik($this->getPiece(4,1));
+            $i->addPieceQuantik($this->getPiece(4,2));
+        } else {
+            $i->addPieceQuantik($this->getPiece(3,3));
+            $i->addPieceQuantik($this->getPiece(3,4));
+            $i->addPieceQuantik($this->getPiece(4,3));
+            $i->addPieceQuantik($this->getPiece(4,4));
+        }
+        return $i;
+    }
+
+    public function getCornerFromCoord(int $rowNum, int $colNum): int
+    {
+        $d=0;
+        if($rowNum<=2 && $colNum<=2){
+           $d=self::$NW;
+        } elseif($rowNum<=2 && $colNum>2){
+            $d=self::$NE;
+        }elseif ($rowNum>2 && $colNum<=2){
+            $d=self::$SW;
+        }else{
+            $d=self::$SE;
+        }
+        return $d;
+    }
+
+    public function __toString()
+    {
+        return $this->cases->__toString();
     }
 }
 
@@ -42,4 +102,5 @@ $p = new PlateauQuantik();
 $piece =  PieceQuantik::initBlackCone();
 $p->setPiece(1, 1, $piece);
 echo $p->getPiece(1,1);
+echo $p;
 ?>
