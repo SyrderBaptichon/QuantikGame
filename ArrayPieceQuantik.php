@@ -67,6 +67,16 @@ class ArrayPieceQuantik implements ArrayAccess,Countable
         $this->piecesQuantik = array_values($this->piecesQuantik);
     }
 
+    public function __toString()
+    {
+        $chaine="";
+        for($i=0;$i<$this->count();$i++){
+           $chaine.=$this->getPieceQuantik($i)->__toString();
+           $chaine.=" ";
+        }
+        return $chaine;
+    }
+
     public static function initPiecesNoires() : ArrayPieceQuantik
     {
         $pack = new ArrayPieceQuantik();
