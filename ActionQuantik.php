@@ -38,7 +38,7 @@ class ActionQuantik {
     {
          return ActionQuantik::isPieceValide($this->plateau->getRow($rowNum),$piece)
             && ActionQuantik::isPieceValide($this->plateau->getCol($colNum),$piece)
-             && ActionQuantik::isPieceValide($this->plateau->getBorder(PlateauQuantik::getCornerFromCoord($rowNum,$colNum)),$piece);
+             && ActionQuantik::isPieceValide($this->plateau->getCorner(PlateauQuantik::getCornerFromCoord($rowNum,$colNum)),$piece);
     }
 
     public function posePiece(int $rowNum, int $colNum, PieceQuantik $piece) : void
@@ -65,7 +65,7 @@ class ActionQuantik {
     private static function isPieceValide(ArrayPieceQuantik $pieces, PieceQuantik $p)
     {
         for($i=0; $i<count($pieces);$i++){
-            if($p->getForme() == $pieces[$i]->getForme())
+            if($p->getForme() == $pieces[$i]->getForme() && $p->getCouleur() != $pieces[$i]->getCouleur())
                 return false;
         }
         return true;

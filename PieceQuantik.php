@@ -115,16 +115,3 @@ class PieceQuantik
 
     }
 }
-
-echo "<pre>\n";
-echo PieceQuantik::initBlackCone()."<br />\n";
-echo PieceQuantik::initWhiteCone()."<br />\n";
-echo PieceQuantik::initBlackCube()."<br />\n";
-echo PieceQuantik::initWhiteCube()."<br />\n";
-echo PieceQuantik::initBlackCylindre()."<br />\n";
-echo PieceQuantik::initWhiteCylindre()."<br />\n";
-echo PieceQuantik::initBlackSphere()."<br />\n";
-echo PieceQuantik::initWhiteSphere()."<br />\n";
-echo PieceQuantik::initVOID()."<br />\n";
-echo "</pre>\n";
-?>

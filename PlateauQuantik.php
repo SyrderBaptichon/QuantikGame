@@ -22,7 +22,7 @@ class PlateauQuantik
 
     public function getPiece(int $rowNum, int $colNum): PieceQuantik
     {
-        $index = ($rowNum - 1) * self::$NBCOLS + ($colNum);
+        $index = ($rowNum - 1) * self::$NBCOLS + ($colNum-1);
         return $this->cases[$index];
     }
 
@@ -35,7 +35,7 @@ class PlateauQuantik
     public function getRow(int $numRow): ArrayPieceQuantik
     {
         $i = new ArrayPieceQuantik();
-        for($y=0;$y<self::$NBROWS;$y++){
+        for($y=1;$y<=self::$NBCOLS;$y++){
             $i[]=$this->getPiece($numRow,$y);
         }
         return $i;
@@ -44,7 +44,7 @@ class PlateauQuantik
     public function getCol(int $numCol): ArrayPieceQuantik
     {
         $i = new ArrayPieceQuantik();
-        for($y=1;$y<=self::$NBCOLS;$y++){
+        for($y=1;$y<=self::$NBROWS;$y++){
             $i->addPieceQuantik($this->getPiece($y,$numCol));
         }
         return $i;
@@ -77,7 +77,7 @@ class PlateauQuantik
         return $i;
     }
 
-    public function getCornerFromCoord(int $rowNum, int $colNum): int
+    public static function getCornerFromCoord(int $rowNum, int $colNum): int
     {
         $d=0;
         if($rowNum<=2 && $colNum<=2){
@@ -98,9 +98,3 @@ class PlateauQuantik
     }
 }
 
-$p = new PlateauQuantik();
-$piece =  PieceQuantik::initBlackCone();
-$p->setPiece(1, 1, $piece);
-echo $p->getPiece(1,1);
-echo $p;
-?>

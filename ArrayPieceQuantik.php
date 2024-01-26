@@ -107,12 +107,3 @@ class ArrayPieceQuantik implements ArrayAccess,Countable
     }
 
 }
-
-$apq = ArrayPieceQuantik::initPiecesNoires();
-for ($i=0; $i<count($apq); $i++)
-    echo $apq[$i];
-echo "\n";
-$apq = ArrayPieceQuantik::initPiecesBlanches();
-for ($i=0; $i<count($apq); $i++)
-    echo $apq[$i];
-echo "\n";
