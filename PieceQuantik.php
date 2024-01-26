@@ -43,10 +43,10 @@ class PieceQuantik
                 $chaine.="&nbsp;&nbsp;&nbsp;&nbsp;";
                 break;
             case "1":
-                $chaine.="Co:";
+                $chaine.="Cu:";
                 break;
             case "2":
-                $chaine.="Cu:";
+                $chaine.="Co:";
                 break;
             case "3":
                 $chaine.="Cy:";
