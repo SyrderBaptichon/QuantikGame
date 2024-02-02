@@ -3,6 +3,7 @@ require_once 'AbstractUIGenerator.php';
 require_once 'PieceQuantik.php';
 require_once 'PlateauQuantik.php';
 require_once 'ActionQuantik.php';
+require_once 'QuantikGame.php';
 class QuantikUIGenerator extends AbstractUIGenerator {
 
     protected static function getButtonClass(PieceQuantik $piece): String
@@ -26,25 +27,34 @@ class QuantikUIGenerator extends AbstractUIGenerator {
     protected static function getDivPiecesDisponibles(ArrayPieceQuantik $apq, int $pos=-1): string
     {
        $chaine = '<div>';
-       for ($i = $pos + 1; $i < $apq->count(); $i++) {
-           $chaine.=self::getButtonClass($apq->getPieceQuantik($i));
+       for ($i = 0; $i < $apq->count(); $i++) {
+           $piece = $apq->getPieceQuantik($i);
+           if($i!=$pos) $chaine.=self::getButtonClass($apq->getPieceQuantik($i));
+           else $chaine .="<button class='has-background-warning' type=\'submit\' name=\'active\' disabled >$piece</button>";
        }
        $chaine.='</div>';
        return $chaine;
     }
 
-    protected static function getFormSelectionPiece(ArrayPieceQuantik $apq): string
+    protected static function getFormSelectionPiece(ArrayPieceQuantik $apq, bool $actif): string
     {
         $chaine = '<form action=\'traiteFormQuantik.php\' method=\'post\'>';
-        for($i = 0; $i < $apq->count(); $i++) {
-            $piece = $apq->getPieceQuantik($i);
-            $chaine.="<button type='submit' name='selectedPiece' value='$i'>$piece</button>";
+        if($actif){
+            for($i = 0; $i < $apq->count(); $i++) {
+                $piece = $apq->getPieceQuantik($i);
+                $chaine .= "<button type='submit' name='selectedPiece' value='$i'>$piece</button>";
+            }
+        }else {
+            for($i = 0; $i < $apq->count(); $i++) {
+                $piece = $apq->getPieceQuantik($i);
+                $chaine.=self::getButtonClass($piece);
+            }
         }
         $chaine.='</form>';
         return $chaine;
     }
 
-    public static function getFormPlateauQuantik(PlateauQuantik $plateau, PieceQuantik $piece): string
+    protected static function getFormPlateauQuantik(PlateauQuantik $plateau, PieceQuantik $piece): string
     {
         $action = new ActionQuantik($plateau);
         $chaine = "<form action='traiteFormQuantik.php' method='post'>";
@@ -67,8 +77,141 @@ class QuantikUIGenerator extends AbstractUIGenerator {
         $chaine.='</form>';
         return $chaine;
     }
+
+    protected static function getFormBoutonAnnulerChoixPiece(): string
+    {
+        $html = "<form action='traiteFormQuantik.php' method='post'>";
+
+        $html .= "<input type='hidden' name='cancelSelection' value='true'>";
+        $html .= "<input type='submit' value='Changer de pièce'>";
+        $html .= "</form>";
+
+        return $html;
+    }
+
+    protected static function getDivMessageVictoire(int $couleur): string
+    {
+        $s = "";
+        if($couleur == PieceQuantik::$BLACK) $s.= "Noirs";
+        else $s.= "Blancs";
+        $html = "<div> 
+                    <p>Victoire des $s !</p> 
+                    <p>".self::getLienRecommencer()."</p>
+                 </div>";
+
+        return $html;
+    }
+
+    protected static function getLienRecommencer(): string
+    {
+        $html = "<a href='traiteFormQuantik.php?action=recommencer'>Recommencer</a>";
+
+        return $html;
+    }
+
+    public static function getPageSelectionPiece(QuantikGame $quantik, int $couleurActive): string
+    {
+        $actifBlanches = ($couleurActive==PieceQuantik::$WHITE);
+        $actifNoires = ($couleurActive==PieceQuantik::$BLACK);
+        $html = AbstractUIGenerator::getDebutHTML();
+
+        $html.= "<div class='columns'>
+                    <div class='column'>
+                        <div>
+                            <h5>Blancs</h5>
+                            <div>".
+                              self::getFormSelectionPiece($quantik->piecesBlanches, $actifBlanches)
+                            ."</div>
+                        </div>
+                        <div>
+                            <h5>Noirs</h5>
+                            <div>".
+                                self::getFormSelectionPiece($quantik->piecesNoires, $actifNoires)
+                            ."</div>
+                        </div>
+                     </div>
+                     <div class='column'>
+                        <h4>Plateau</h4>".
+                        self::getDivPlateauQuantik($quantik->plateau, null)
+                    ."</div>
+                </div>";
+        $html.= AbstractUIGenerator::getFinHTML();
+        return $html;
+    }
+
+    public static function getPagePosePiece(QuantikGame  $quantik, int $couleurActive, int $posSelection): string
+    {
+        $actifBlanches = ($couleurActive==PieceQuantik::$WHITE);
+        $actifNoires = ($couleurActive==PieceQuantik::$BLACK);
+        $html = AbstractUIGenerator::getDebutHTML();
+
+        if($actifBlanches) {
+            $html.= "<div class='columns'>
+                    <div class='column'>
+                        <div>
+                            <h5>Blancs</h5>
+                            <div>".
+                self::getDivPiecesDisponibles($quantik->piecesBlanches, $posSelection)
+                ."</div>
+                        </div>
+                        <div>
+                            <h5>Noirs</h5>
+                            <div>".
+                self::getDivPiecesDisponibles($quantik->piecesNoires)
+                ."</div>
+                        </div>
+                     </div>
+                     <div class='column'>
+                        <h4>Plateau</h4>".
+                self::getDivPlateauQuantik($quantik->plateau, null)
+                ."</div>
+                </div>
+                <div>".
+                self::getFormBoutonAnnulerChoixPiece()
+                ."</div>";
+        } else {
+            $html.= "<div class='columns'>
+                    <div class='column'>
+                        <div>
+                            <h5>Blancs</h5>
+                            <div>".
+                self::getDivPiecesDisponibles($quantik->piecesBlanches)
+                ."</div>
+                        </div>
+                        <div>
+                            <h5>Noirs</h5>
+                            <div>".
+                self::getDivPiecesDisponibles($quantik->piecesNoires, $posSelection)
+                ."</div>
+                        </div>
+                     </div>
+                     <div class='column'>
+                        <h4>Plateau</h4>".
+                self::getDivPlateauQuantik($quantik->plateau, null)
+                ."</div>
+                </div>
+                <div>".
+                self::getFormBoutonAnnulerChoixPiece()
+                ."</div>";
+        }
+
+        $html.= AbstractUIGenerator::getFinHTML();
+        return $html;
+    }
+
+    public static function getPageVictoire(QuantikGame $quantik, int $couleurActive): string
+    {
+        $html = self::getPageSelectionPiece($quantik, $couleurActive);
+        $html.= self::getDivMessageVictoire($couleurActive);
+        return $html;
+    }
 }
 
 $pq = new PlateauQuantik();
+$qg = new QuantikGame();
+$qg->plateau = new PlateauQuantik();
+$qg->piecesBlanches = ArrayPieceQuantik::initPiecesBlanches();
+$qg->piecesNoires = ArrayPieceQuantik::initPiecesNoires();
+$qg->couleurPlayer = array(PieceQuantik::$BLACK, PieceQuantik::$WHITE);
 $pq->setPiece(1 , 1, PieceQuantik::initWhiteCube());
-echo QuantikUIGenerator::getFormPlateauQuantik($pq, PieceQuantik::initBlackCube());
+echo QuantikUIGenerator::getPageVictoire($qg, PieceQuantik::$BLACK);
