@@ -44,6 +44,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
             $piece = $apq->getPieceQuantik($i);
             $chaine .= "<button type='submit' name='selectedPiece' value='$i'>$piece</button>";
         }
+        $chaine.= "<input type='hidden' value='choisirPiece' name='action'/>\n";
 
         $chaine.='</form>';
         return $chaine;
@@ -60,7 +61,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
                 $p = $plateau->getPiece($i, $j);
                 $chaine.="<td>";
                 if($action->isValidePose($i, $j, $piece)) {
-                    $chaine.="<button class='has-background-success' type='submit' name='selectedPiece' value='$i,$j'>$p</button>";
+                    $chaine.="<button class='has-background-success' type='submit' name='placePiece' value='$i,$j'>$p</button>";
                 } else {
                     $chaine.="<button type='submit' name='selectedPiece' disabled>$p</button>";
                 }
@@ -69,6 +70,8 @@ class QuantikUIGenerator extends AbstractUIGenerator {
             $chaine.="</tr>";
         }
         $chaine.="</table>";
+        $chaine.= "<input type='submit' value='poserPiece' name='action' hidden='hidden'/>\n";
+
         $chaine.='</form>';
         return $chaine;
     }
@@ -79,6 +82,8 @@ class QuantikUIGenerator extends AbstractUIGenerator {
 
         $html .= "<input type='hidden' name='cancelSelection' value='true'>";
         $html .= "<input type='submit' value='Changer de pièce'>";
+        $html.= "<input type='submit' value='annulerChoix' name='action' hidden='hidden'/>\n";
+
         $html .= "</form>";
 
         return $html;
@@ -98,7 +103,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
 
     protected static function getLienRecommencer(): string
     {
-        return "<a href='traiteFormQuantik.php?action=recommencer'>Recommencer</a>";
+        return "<a href='traiteFormQuantik.php?action=recommencerPartie'>Recommencer</a>";
     }
 
     public static function getPageSelectionPiece(QuantikGame $quantik, int $couleurActive): string

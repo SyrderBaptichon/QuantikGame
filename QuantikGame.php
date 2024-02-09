@@ -1,6 +1,7 @@
 <?php
+require_once 'AbstractGame.php';
 
-class QuantikGame
+class QuantikGame extends AbstractGame
 {
     public PlateauQuantik $plateau;
     public ArrayPieceQuantik $piecesBlanches;
