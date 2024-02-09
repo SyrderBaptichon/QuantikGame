@@ -192,11 +192,3 @@ class QuantikUIGenerator extends AbstractUIGenerator {
     }
 }
 
-$pq = new PlateauQuantik();
-$qg = new QuantikGame();
-$qg->plateau = new PlateauQuantik();
-$qg->piecesBlanches = ArrayPieceQuantik::initPiecesBlanches();
-$qg->piecesNoires = ArrayPieceQuantik::initPiecesNoires();
-$qg->couleurPlayer = array(PieceQuantik::$BLACK, PieceQuantik::$WHITE);
-$pq->setPiece(1 , 1, PieceQuantik::initWhiteCube());
-echo QuantikUIGenerator::getPageVictoire($qg, PieceQuantik::$BLACK);
