@@ -24,7 +24,7 @@ class AbstractUIGenerator{
 
     public static function getPageErreur(String $message, String $urlLien) : String
     {
-        return $message.'\n'.$urlLien;
+        return self::getDebutHTML().$message.'\n'.$urlLien.self::getFinHTML();
     }
 
 }

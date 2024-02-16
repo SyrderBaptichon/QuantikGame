@@ -44,7 +44,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
             $piece = $apq->getPieceQuantik($i);
             $chaine .= "<button type='submit' name='selectedPiece' value='$i'>$piece</button>";
         }
-        $chaine.= "<input type='hidden' value='choisirPiece' name='action'/>\n";
+        $chaine.= "<input type='hidden' value='poserPiece' name='action'/>\n";
 
         $chaine.='</form>';
         return $chaine;
@@ -70,7 +70,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
             $chaine.="</tr>";
         }
         $chaine.="</table>";
-        $chaine.= "<input type='submit' value='poserPiece' name='action' hidden='hidden'/>\n";
+        $chaine.= "<input type='hidden' value='poserPiece' name='action'/>\n";
 
         $chaine.='</form>';
         return $chaine;
@@ -80,9 +80,8 @@ class QuantikUIGenerator extends AbstractUIGenerator {
     {
         $html = "<form action='traiteFormQuantik.php' method='post'>";
 
-        $html .= "<input type='hidden' name='cancelSelection' value='true'>";
-        $html .= "<input type='submit' value='Changer de pièce'>";
-        $html.= "<input type='submit' value='annulerChoix' name='action' hidden='hidden'/>\n";
+        $html .= "<button type='submit' value='Changer de pièce'>";
+        $html.= "<input type='hidden' value='annulerChoix' name='action'/>\n";
 
         $html .= "</form>";
 

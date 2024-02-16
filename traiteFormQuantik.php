@@ -9,26 +9,55 @@ $UI = &$_SESSION['UI'];
 if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'choisirPiece':
-            $UI->currentPlayer++;
-            $UI->currentPlayer = $UI->currentPlayer % 2;
-            $UI->gamestatus = "choixPiece";
+
+            $UI->gamestatus = "posePiece";
 
             break;
 
-        case 'finir':
-            // Handle 'finir' action
+        case 'poserPiece':
+
+            if($UI->currentPlayer == PieceQuantik::$BLACK){
+                $piece = $UI->piecesNoires[$_POST['selectedPiece']];
+                $UI->piecesNoires->removePieceQuantik($_POST['selectedPiece']);
+            }else {
+                $piece = $UI->piecesBlanches[$_POST['selectedPiece']];
+                $UI->piecesBlanches->removePieceQuantik($_POST['selectedPiece']);
+            }
+
+            $positions = explode(',', $_POST['placePiece']);
+            $i = $positions[0]; // Première valeur
+            $j = $positions[1]; // Deuxième valeur
+            $action = new ActionQuantik($UI->plateau);
+            $action->posePiece($i,$j,$piece);
+
+            if($action->isRowWin($i) || $action->isColWin($j) || $action->isCornerWin(PlateauQuantik::getCornerFromCoord($i,$j))){
+                $UI->gameStatus = "victoire";
+            } else {
+                $UI->currentPlayer++;
+                $UI->currentPlayer = $UI->currentPlayer % 2;
+                $UI->gameStatus = "choixPiece";
+            }
+
             break;
 
-        case 'raz':
-            // Handle 'raz' action
+        case 'annulerChoix':
+
+            $UI->gameStatus = "choixPiece";
+
+            break;
+
+        case 'recommencerPartie':
+
+            session_unset();
+            session_destroy();
+
             break;
 
         default:
-            echo "An unexpected action was requested";
+            $UI->gameStatus = "erreur";
     }
 }
 
-header('HTTP/1.1 303 See Other');
 header("Location: index.php");
 // Commenting out session_unset and session_destroy to avoid ending the session.
 // session_unset();

@@ -24,14 +24,13 @@ switch ($_SESSION['UI']->gameStatus){
         $chaine .= QuantikUIGenerator::getPageSelectionPiece($UI, $UI->currentPlayer);
         break;
     case 'posePiece':
-        // Handle 'finir' action
+        $chaine .= QuantikUIGenerator::getPagePosePiece($UI,$UI->currentPlayer,$_POST['selectedPiece']);
         break;
-
     case 'victoire':
         $chaine .= QuantikUIGenerator::getPageVictoire($UI, $UI->currentPlayer);
         break;
     default:
-        $chaine .= AbstractUIGenerator::getPageErreur();
+        $chaine .= AbstractUIGenerator::getPageErreur("Erreur au cours de la partie", "<a href='traiteFormQuantik.php?action=recommencerPartie'>Recommencer</a>");
 }
 
 echo $chaine;
