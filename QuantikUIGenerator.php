@@ -30,7 +30,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
        for ($i = 0; $i < $apq->count(); $i++) {
            $piece = $apq->getPieceQuantik($i);
            if($i!=$pos) $chaine.=self::getButtonClass($apq->getPieceQuantik($i));
-           else $chaine .="<button class='has-background-warning' type=\'submit\' name=\'active\' disabled >$piece</button>";
+           else $chaine .="<button class='has-background-warning' type='submit' name='active' disabled >$piece</button>";
        }
        $chaine.='</div>';
        return $chaine;
