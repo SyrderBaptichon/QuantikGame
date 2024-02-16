@@ -3,7 +3,7 @@
 require_once 'PieceQuantik.php';
 class ArrayPieceQuantik implements ArrayAccess,Countable
 {
-    protected $piecesQuantik;
+    protected array $piecesQuantik;
 
     public function __construct()
     {
@@ -11,22 +11,19 @@ class ArrayPieceQuantik implements ArrayAccess,Countable
     }
 
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
-        // TODO: Implement offsetExists() method.
         return isset($this->piecesQuantik[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
-        // TODO: Implement offsetGet() method.
-        return isset($this->piecesQuantik[$offset])?
+        return isset($this->piecesQuantik[$offset]) ?
             $this->piecesQuantik[$offset] : null;
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
-        // TODO: Implement offsetSet() method.
         if (is_null($offset)) {
             $this->piecesQuantik[] = $value;
         } else {
@@ -34,15 +31,13 @@ class ArrayPieceQuantik implements ArrayAccess,Countable
         }
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
-        // TODO: Implement offsetUnset() method.
         unset($this->piecesQuantik[$offset]);
     }
 
-    public function count()
+    public function count(): int
     {
-        // TODO: Implement count() method.
         return count($this->piecesQuantik);
     }
 

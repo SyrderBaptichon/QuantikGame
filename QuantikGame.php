@@ -7,5 +7,5 @@ class QuantikGame extends AbstractGame
     public ArrayPieceQuantik $piecesBlanches;
     public ArrayPieceQuantik $piecesNoires;
     public array $couleurPlayer;
+
 }
-?>

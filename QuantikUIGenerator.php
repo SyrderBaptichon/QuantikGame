@@ -8,7 +8,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
 
     protected static function getButtonClass(PieceQuantik $piece): String
     {
-        return '<button type=\'submit\' name=\'active\' disabled >'.$piece.'</button>';
+        return "<button class=\"buttonPiece\" type=\'submit\' name=\'active\'  disabled >$piece</button>";
     }
 
     protected static function getDivPlateauQuantik(PlateauQuantik $plateau): String
@@ -30,7 +30,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
        for ($i = 0; $i < $apq->count(); $i++) {
            $piece = $apq->getPieceQuantik($i);
            if($i!=$pos) $chaine.=self::getButtonClass($apq->getPieceQuantik($i));
-           else $chaine .="<button class='has-background-warning' type='submit' name='active' disabled >$piece</button>";
+           else $chaine .="<button class=\"buttonPiece has-background-warning\"  type='submit' name='active' disabled >$piece</button>";
        }
        $chaine.='</div>';
        return $chaine;
@@ -38,13 +38,13 @@ class QuantikUIGenerator extends AbstractUIGenerator {
 
     protected static function getFormSelectionPiece(ArrayPieceQuantik $apq): string
     {
-        $chaine = '<form action=\'traiteFormQuantik.php\' method=\'post\'>';
+        $chaine = "<form action='traiteFormQuantik.php' method='POST'>";
 
         for($i = 0; $i < $apq->count(); $i++) {
             $piece = $apq->getPieceQuantik($i);
-            $chaine .= "<button type='submit' name='selectedPiece' value='$i'>$piece</button>";
+            $chaine .= "<button class=\"buttonPiece\" type='submit' name='selectedPiece' value='$i'>$piece</button>";
         }
-        $chaine.= "<input type='hidden' value='poserPiece' name='action'/>\n";
+        $chaine.= "<input type='hidden' value='choisirPiece' name='action'/>\n";
 
         $chaine.='</form>';
         return $chaine;
@@ -53,7 +53,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
     protected static function getFormPlateauQuantik(PlateauQuantik $plateau, PieceQuantik $piece): string
     {
         $action = new ActionQuantik($plateau);
-        $chaine = "<form action='traiteFormQuantik.php' method='post'>";
+        $chaine = "<form action='traiteFormQuantik.php' method='POST'>";
         $chaine.="<table class='is-table'>";
         for($i = 1; $i <= $plateau::$NBROWS; $i++) {
             $chaine.="<tr>";
@@ -61,9 +61,9 @@ class QuantikUIGenerator extends AbstractUIGenerator {
                 $p = $plateau->getPiece($i, $j);
                 $chaine.="<td>";
                 if($action->isValidePose($i, $j, $piece)) {
-                    $chaine.="<button class='has-background-success' type='submit' name='placePiece' value='$i,$j'>$p</button>";
+                    $chaine.="<button class='buttonPiece has-background-success' type='submit' name='placePiece' value='$i,$j'>$p</button>";
                 } else {
-                    $chaine.="<button type='submit' name='selectedPiece' disabled>$p</button>";
+                    $chaine.="<button class='buttonPiece' type='submit' disabled>$p</button>";
                 }
                 $chaine.="</td>";
             }
@@ -80,7 +80,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
     {
         $html = "<form action='traiteFormQuantik.php' method='post'>";
 
-        $html .= "<button type='submit' value='Changer de pièce'>";
+        $html .= "<button type='submit' value='Changer de pièce'>Annuler le choix</button>";
         $html.= "<input type='hidden' value='annulerChoix' name='action'/>\n";
 
         $html .= "</form>";
@@ -102,7 +102,10 @@ class QuantikUIGenerator extends AbstractUIGenerator {
 
     protected static function getLienRecommencer(): string
     {
-        return "<a href='traiteFormQuantik.php?action=recommencerPartie'>Recommencer</a>";
+        $html = "<form action='traiteFormQuantik.php' method='post'>";
+        $html .= "<button type='submit' value='recommencerPartie' name='action'>Recommencer</button>";
+        $html .= "</form>";
+        return $html;
     }
 
     public static function getPageSelectionPiece(QuantikGame $quantik, int $couleurActive): string

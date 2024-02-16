@@ -7,4 +7,3 @@ class AbstractGame
     public int $currentPlayer;
     public string $gameStatus;
 }
-?>
