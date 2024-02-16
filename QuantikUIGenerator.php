@@ -193,7 +193,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
 
     public static function getPageVictoire(QuantikGame $quantik, int $couleurActive): string
     {
-        $html = self::getPageSelectionPiece($quantik, $couleurActive);
+        $html = self::getPageSelectionPiece($quantik, 3);
         $html.= self::getDivMessageVictoire($couleurActive);
         return $html;
     }
