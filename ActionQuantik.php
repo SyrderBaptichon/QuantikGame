@@ -1,5 +1,4 @@
 <?php
-
 class ActionQuantik {
     protected $plateau;
 

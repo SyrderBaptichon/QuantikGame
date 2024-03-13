@@ -21,6 +21,12 @@ if (!isset($_SESSION['UI'])) {
 }
 
 switch ($_SESSION['ETAT']){
+    case 'login':
+        header("Location: index.php");
+        exit();
+
+
+
     case 'choixPiece':
         $chaine .= QuantikUIGenerator::getPageSelectionPiece($_SESSION['UI'], $_SESSION['UI']->currentPlayer);
         break;

@@ -1,5 +1,4 @@
 <?php
-
 class AbstractGame
 {
     protected int $gameID;

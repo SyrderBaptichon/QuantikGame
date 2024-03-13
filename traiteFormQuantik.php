@@ -46,6 +46,10 @@ if (isset($_POST['action'])) {
             session_destroy();
             break;
 
+        case 'connecter':
+            $_SESSION['ETAT'] = "home";
+            $_SESSION['playerName'] = $_POST['playerName'];
+
         default:
             $_SESSION['ETAT'] = "erreur";
     }

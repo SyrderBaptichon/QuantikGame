@@ -1,5 +1,4 @@
 <?php
-
 require_once 'PieceQuantik.php';
 class ArrayPieceQuantik implements ArrayAccess,Countable
 {

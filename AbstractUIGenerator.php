@@ -1,5 +1,4 @@
 <?php
-
 class AbstractUIGenerator{
 
     protected static function getDebutHTML(String $title="Jeu Quantik"): String{

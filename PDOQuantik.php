@@ -1,12 +1,8 @@
 <?php
-
 require_once 'Player.php';
+require_once 'db.php';
 
 use PDO;
-use PDOStatement;
-use Player;
-
-
 class PDOQuantik
 {
     private static PDO $pdo;
@@ -26,8 +22,8 @@ class PDOQuantik
     }
 
     /* requêtes Préparées pour l'entitePlayer */
-    private static PDOStatement $createPlayer;
-    private static PDOStatement $selectPlayerByName;
+    private static $createPlayer;
+    private static $selectPlayerByName;
 
     /******** Gestion des requêtes relatives à Player *************/
     public static function createPlayer(string $name): Player
@@ -50,12 +46,12 @@ class PDOQuantik
     }
 
     /* requêtes préparées pour l'entiteGameQuantik */
-    private static PDOStatement $createGameQuantik;
-    private static PDOStatement $saveGameQuantik;
-    private static PDOStatement $addPlayerToGameQuantik;
-    private static PDOStatement $selectGameQuantikById;
-    private static PDOStatement $selectAllGameQuantik;
-    private static PDOStatement $selectAllGameQuantikByPlayerName;
+    private static $createGameQuantik;
+    private static $saveGameQuantik;
+    private static $addPlayerToGameQuantik;
+    private static $selectGameQuantikById;
+    private static $selectAllGameQuantik;
+    private static $selectAllGameQuantikByPlayerName;
 
     /******** Gestion des requêtes relatives à QuantikGame *************/
 

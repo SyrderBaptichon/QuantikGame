@@ -1,5 +1,4 @@
 <?php
-
 class Player
 {
     public string $name;
