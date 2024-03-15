@@ -1,12 +1,20 @@
 <?php
 require_once 'AbstractGame.php';
+require_once 'PlateauQuantik.php';
+require_once 'ArrayPieceQuantik.php';
+
 
 class QuantikGame extends AbstractGame
 {
     public PlateauQuantik $plateau;
     public ArrayPieceQuantik $piecesBlanches;
     public ArrayPieceQuantik $piecesNoires;
-    public array $couleurPlayer;
+    public array $couleursPlayers;
+
+    public function __construct(array $pl)
+    {
+        $this->couleursPlayers = $pl;
+    }
 
     public function __toString(): string
     {
@@ -46,4 +54,32 @@ class QuantikGame extends AbstractGame
         $qg->gameStatus = $object->gameStatus;
         return $qg;
     }
+
+    public function nomCourant()
+    {
+        $tab = $this->couleursPlayers;
+        if (is_null($tab[$this->currentPlayer])) return 'un joueur';
+        return $tab[$this->currentPlayer]->getName();
+    }
+
+    public function lanceur()
+    {
+        return $this->couleursPlayers[0]->getName();
+    }
+
+    public function isMembre(string $nom):bool
+    {
+        return ($this->couleursPlayers[0])->getName() == $nom || ($this->couleursPlayers[1])->getName() == $nom;
+    }
+
+    public function isCourant(string $nom):bool
+    {
+        return $this->nomCourant() == $nom;
+    }
+
+    private function getPlayers()
+    {
+        return $this->couleursPlayers;
+    }
+
 }

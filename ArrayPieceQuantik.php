@@ -104,7 +104,7 @@ class ArrayPieceQuantik implements ArrayAccess,Countable
     {
         $json = "[";
         $jTab = [];
-        foreach ($this->piecesQuantiks as $p)
+        foreach ($this->piecesQuantik as $p)
             $jTab[] = $p->getJson();
         $json .= implode(',', $jTab);
         return $json . ']';

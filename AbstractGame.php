@@ -1,7 +1,7 @@
 <?php
 class AbstractGame
 {
-    protected int $gameID;
+    public int $gameID;
     protected array $players;
     public int $currentPlayer;
     public string $gameStatus;

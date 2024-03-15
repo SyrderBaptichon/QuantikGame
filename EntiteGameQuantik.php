@@ -1,5 +1,4 @@
 <?php
-namespace Quantik2024;
 
 class EntiteGameQuantik
 {
@@ -16,6 +15,11 @@ class EntiteGameQuantik
     public function setGameId(int $gameId): void
     {
         $this->gameid = $gameId;
+    }
+
+    public function __toString(): string
+    {
+        return $this->playerone.' '.$this->gameid;
     }
 
 }

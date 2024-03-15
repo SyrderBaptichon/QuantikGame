@@ -1,21 +1,40 @@
 <?php
 class AbstractUIGenerator{
 
-    protected static function getDebutHTML(String $title="Jeu Quantik"): String{
+    public static function getDebutHTML(String $title="Jeu Quantik"): String{
         $chaine="<!DOCTYPE html>
                     <html>
                     <head>
                         <meta charset=\"utf-8\">
                         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
                         <title>$title</title>
-                        <link rel=\"stylesheet\" href=\"style.css\">
                         <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css\">
+                        <link rel='stylesheet' href='style.css'>
+                        <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+                background-color: #cac5c5;
+
+        }
+
+        .container {
+            text-align: center;
+        }
+        
+        .fieldset {
+            text-align: justify ;
+        }
+    </style>
                     </head>
                     <body>";
     return $chaine;
     }
 
-    protected static function getFinHTML(): String
+    public static function getFinHTML(): String
     {
         $chaine='</body>
 </html>';

@@ -1,8 +1,10 @@
 <?php
-require_once 'Player.php';
 require_once 'db.php';
+require_once 'QuantikGame.php';
+require_once 'Player.php';
+require_once 'EntiteGameQuantik.php';
+require_once 'QuantikUIGenerator.php';
 
-use PDO;
 class PDOQuantik
 {
     private static PDO $pdo;
@@ -30,7 +32,7 @@ class PDOQuantik
     {
         if (!isset(self::$createPlayer))
             self::$createPlayer = self::$pdo->prepare('INSERT INTO Player(name) VALUES (:name)');
-        self::$createPlayer->bindValue(':name', $name, PDO::PARAM_STR);
+        self::$createPlayer->bindValue(':name', $name);
         self::$createPlayer->execute();
         return self::selectPlayerByName($name);
     }
@@ -39,7 +41,7 @@ class PDOQuantik
     {
         if (!isset(self::$selectPlayerByName))
             self::$selectPlayerByName = self::$pdo->prepare('SELECT * FROM Player WHERE name=:name');
-        self::$selectPlayerByName->bindValue(':name', $name, PDO::PARAM_STR);
+        self::$selectPlayerByName->bindValue(':name', $name);
         self::$selectPlayerByName->execute();
         $player = self::$selectPlayerByName->fetchObject('Player');
         return ($player) ? $player : null;
@@ -60,10 +62,22 @@ class PDOQuantik
      */
     public static function createGameQuantik(string $playerName, string $json): void
     {
-        if (!isset(self::$createGameQuantik))
-            self::$createGameQuantik = self::$pdo->prepare('INSERT INTO QuantikGame(playerOne, json) VALUES (?, ?)');
-        $id = self::selectPlayerByName($playerName)->getId();
-        self::$createGameQuantik->bindValue($id, $json, PDO::PARAM_STR);
+        // Obtenez l'ID du joueur en utilisant son nom
+        $player = self::selectPlayerByName($playerName);
+        if (!$player) {
+            throw new Exception("Le joueur $playerName n'existe pas.");
+        }
+        $playerId = $player->getId();
+
+        // Préparer la requête SQL pour insérer une nouvelle partie
+        $sql = "INSERT INTO QuantikGame (playerOne, json) VALUES (:playerId, :json)";
+
+        // Préparer la requête avec PDO
+        self::$createGameQuantik = self::$pdo->prepare($sql);
+
+        // Liaison des valeurs et exécution de la requête
+        self::$createGameQuantik->bindValue(':playerId', $playerId, PDO::PARAM_INT);
+        self::$createGameQuantik->bindValue(':json', $json, PDO::PARAM_STR);
         self::$createGameQuantik->execute();
     }
 
@@ -73,9 +87,15 @@ class PDOQuantik
      */
     public static function saveGameQuantik(string $gameStatus, string $json, int $gameId): void
     {
-        if (!isset(self::$saveGameQuantik))
-            self::$saveGameQuantik = self::$pdo->prepare('UPDATE QuantikGame SET gameStatus=?, json=? WHERE gameId=?');
-        self::$saveGameQuantik->bindValue($gameStatus, $json, $gameId, PDO::PARAM_STR);
+        $sql = "UPDATE QuantikGame SET gameStatus = :gameStatus, json = :json WHERE gameId = :gameId";
+
+        // Préparer la requête avec PDO
+        self::$saveGameQuantik = self::$pdo->prepare($sql);
+
+        // Liaison des valeurs et exécution de la requête
+        self::$saveGameQuantik->bindValue(':gameStatus', $gameStatus, PDO::PARAM_STR);
+        self::$saveGameQuantik->bindValue(':json', $json, PDO::PARAM_STR);
+        self::$saveGameQuantik->bindValue(':gameId', $gameId, PDO::PARAM_INT);
         self::$saveGameQuantik->execute();
     }
 
@@ -84,9 +104,23 @@ class PDOQuantik
      */
     public static function addPlayerToGameQuantik(string $playerName, string $json, int $gameId): void
     {
-        if (!isset(self::$addPlayerToGameQuantik))
-            self::$addPlayerToGameQuantik = self::$pdo->prepare('UPDATE QuantikGame SET playerTwo=?, json=? WHERE gameId=?');
-        self::$addPlayerToGameQuantik->bindValue($playerName, $json, $gameId, PDO::PARAM_STR);
+        // Obtenez l'ID du joueur en utilisant son nom
+        $player = self::selectPlayerByName($playerName);
+        if (!$player) {
+            throw new Exception("Le joueur $playerName n'existe pas.");
+        }
+        $playerId = $player->getId();
+
+        // Préparer la requête SQL pour ajouter un deuxième joueur à une partie Quantik
+        $sql = "UPDATE QuantikGame SET playerTwo = :playerId, json = :json WHERE gameId = :gameId";
+
+        // Préparer la requête avec PDO
+        self::$addPlayerToGameQuantik = self::$pdo->prepare($sql);
+
+        // Liaison des valeurs et exécution de la requête
+        self::$addPlayerToGameQuantik->bindValue(':playerId', $playerId, PDO::PARAM_INT);
+        self::$addPlayerToGameQuantik->bindValue(':json', $json, PDO::PARAM_STR);
+        self::$addPlayerToGameQuantik->bindValue(':gameId', $gameId, PDO::PARAM_INT);
         self::$addPlayerToGameQuantik->execute();
     }
 
@@ -96,12 +130,28 @@ class PDOQuantik
      */
     public static function getGameQuantikById(int $gameId): ?QuantikGame
     {
-        if (!isset(self::$selectGameQuantikById))
-            self::$selectGameQuantikById = self::$pdo->prepare('SELECT * FROM quantikgame WHERE gameId=?');
-        self::$selectGameQuantikById->bindValue($gameId, PDO::PARAM_STR);
+        // Préparer la requête SQL pour récupérer une partie Quantik en fonction de son identifiant
+        $sql = "SELECT * FROM QuantikGame WHERE gameId = :gameId";
+
+        // Préparer la requête avec PDO
+        self::$selectGameQuantikById = self::$pdo->prepare($sql);
+
+        // Liaison de l'identifiant de la partie et exécution de la requête
+        self::$selectGameQuantikById->bindValue(':gameId', $gameId, PDO::PARAM_INT);
         self::$selectGameQuantikById->execute();
-        $game = self::$selectGameQuantikById->fetchObject('QuantikGame');
-        return ($game) ? $game : null;
+
+        // Récupérer la ligne de résultat de la requête
+        $result = self::$selectGameQuantikById->fetch(PDO::FETCH_ASSOC);
+
+        // Vérifier si la partie existe
+        if (!$result) {
+            return null; // La partie n'existe pas
+        }
+
+        // Créer une instance de QuantikGame à partir des données récupérées
+        $quantikGame = QuantikGame::initQuantikGame($result['json']);
+
+        return $quantikGame;
     }
     /**
      * initialisation et execution de $selectAllGameQuantik la requête préparée pour récupérer toutes
@@ -109,14 +159,16 @@ class PDOQuantik
      */
     public static function getAllGameQuantik(): array
     {
-        $resu = array();
         if (!isset(self::$selectAllGameQuantik))
             self::$selectAllGameQuantik = self::$pdo->prepare('SELECT * FROM quantikgame');
         self::$selectAllGameQuantik->execute();
-        while($game = self::$selectAllGameQuantik->fetchObject('QuantikGame')){
-            $resu[] = $game;
+        $games = [];
+        while ($row = self::$selectAllGameQuantik->fetch(PDO::FETCH_ASSOC)) {
+            $game = QuantikGame::initQuantikGame($row['json']);
+            $games[] = $game;
         }
-        return $resu;
+
+        return $games;
     }
 
     /**
@@ -126,15 +178,25 @@ class PDOQuantik
      */
     public static function getAllGameQuantikByPlayerName(string $playerName): array
     {
-        $resu = array();
-        if (!isset(self::$selectAllGameQuantik))
-            self::$selectAllGameQuantik = self::$pdo->prepare('SELECT * FROM quantikgame WHERE playerOne= :name  OR playerTwo= :name');
-        self::$selectAllGameQuantik->bindValue(':name', $playerName, PDO::PARAM_STR);
-        self::$selectAllGameQuantik->execute();
-        while($game = self::$selectAllGameQuantik->fetchObject('QuantikGame')){
-            $resu[] = $game;
+        // Préparer la requête SQL
+        $sql = "SELECT * FROM quantikgame WHERE playerOne = (SELECT id FROM player WHERE name = :playerName)
+            OR playerTwo = (SELECT id FROM player WHERE name = :playerName)";
+
+        // Préparer la requête avec PDO
+        self::$selectAllGameQuantikByPlayerName = self::$pdo->prepare($sql);
+
+        // Liaison des valeurs et exécution de la requête
+        self::$selectAllGameQuantikByPlayerName->bindValue(':playerName', $playerName, PDO::PARAM_STR);
+        self::$selectAllGameQuantikByPlayerName->execute();
+
+        // Récupération des résultats sous forme d'objets QuantikGame
+        $games = [];
+        while ($row = self::$selectAllGameQuantikByPlayerName->fetch(PDO::FETCH_ASSOC)) {
+            $game = QuantikGame::initQuantikGame($row['json']);
+            $games[] = $game;
         }
-        return $resu;
+
+        return $games;
     }
     /**
      * initialisation et execution de la requête préparée pour récupérer
@@ -146,4 +208,32 @@ class PDOQuantik
         return end($res)->gameId;
     }
 
+    public static function getMaxIdGameQuantik(): int
+    {
+        global $pdo; // Utiliser la connexion PDO définie dans votre fichier db.php
+
+        try {
+            $query = "SELECT MAX(gameId) AS max_id FROM QuantikGame";
+            $statement = self::$pdo->query($query);
+
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+            $maxId = $result['max_id'];
+
+            if ($maxId === null) {
+                return 0; // Aucun jeu dans la table, retourner 0 ou une valeur par défaut
+            } else {
+                return intval($maxId); // Retourner l'identifiant de jeu maximum sous forme d'entier
+            }
+        } catch (PDOException $e) {
+            exit("Erreur PDO: " . $e->getMessage());
+        }
+    }
+
 }
+PDOQuantik::initPDO($_ENV['sgbd'],$_ENV['host'],$_ENV['database'],$_ENV['user'],$_ENV['password']);
+/*$game = PDOQuantik::getGameQuantikById(1);
+$q = QuantikGame::initQuantikGame($game->getJson());
+//echo QuantikUIGenerator::getPageSelectionPiece($game,$game->currentPlayer);
+echo $q->getJson();*/
+// Exemple d'utilisation de la fonction

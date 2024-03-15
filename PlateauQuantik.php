@@ -10,7 +10,7 @@ class PlateauQuantik
     public static int $SW = 2;
     public static int $SE = 3;
 
-    protected $cases;
+    protected ArrayPieceQuantik $cases;
 
     public function __construct()
     {
@@ -92,18 +92,13 @@ class PlateauQuantik
         return $d;
     }
 
-    public function __toString()
+    /*public function __toString()
     {
         return $this->cases->__toString();
-    }
+    }*/
 
     public function getJson(): string {
-        $json = "[";
-        $jTab = [];
-        foreach ($this->cases as $apq)
-            $jTab[] = $apq->getJson();
-        $json .= implode(',',$jTab);
-        return $json.']';
+        return $this->cases->getJson();
     }
 
     public static function initPlateauQuantik(string|array $json) : PlateauQuantik
@@ -111,11 +106,15 @@ class PlateauQuantik
         $pq = new PlateauQuantik();
         if (is_string($json))
             $json = json_decode($json);
-        $cases = [];
+        $tab = [];
         foreach($json as $elem)
-            $cases[] = ArrayPieceQuantik::initArrayPieceQuantik($elem);
-        $pq->cases = $cases;
+            $tab[] = PieceQuantik::initPieceQuantik($elem);
+        $pq->cases = ArrayPieceQuantik::initArrayPieceQuantik($tab);
         return $pq;
     }
 }
 
+/*$p = new PlateauQuantik();
+echo $p->getJson()."\n";
+$plateau = PlateauQuantik::initPlateauQuantik($p->getJson());
+echo $plateau->getPiece(1,1);*/
