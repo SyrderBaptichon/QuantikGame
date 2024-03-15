@@ -10,25 +10,6 @@ class AbstractUIGenerator{
                         <title>$title</title>
                         <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css\">
                         <link rel='stylesheet' href='style.css'>
-                        <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-                background-color: #cac5c5;
-
-        }
-
-        .container {
-            text-align: center;
-        }
-        
-        .fieldset {
-            text-align: justify ;
-        }
-    </style>
                     </head>
                     <body>";
     return $chaine;

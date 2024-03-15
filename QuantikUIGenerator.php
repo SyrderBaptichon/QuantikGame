@@ -245,7 +245,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
 
     public static function getPageVictoire(QuantikGame $quantik, int $couleurActive): string
     {
-        $html = "<h3 class='texteV'>Victoire de ". $_SESSION['winner']. " </h3>";
+        $html = "<h3 class='texteV'>Victoire de ". $_SESSION['winner']. " </h3> <br/>";
         $html .= self::getPageSelectionPiece($quantik, 3);
         $html.= self::getLienRecommencer();
         return $html;

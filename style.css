@@ -4,13 +4,16 @@
 }
 
 body, html {
-    height: 100%;
+    
+    background-color: #cac5c5;
+}
+
+.columns {
+	height: 100%;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #cac5c5;
-
 }
 
 body{
