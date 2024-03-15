@@ -27,4 +27,9 @@ class Player
     public function getJson():string {
         return '{"name":"'.$this->name.'","id":'.$this->id.'}';
     }
+
+    public static function initPlayer(string $json): Player {
+        $object = json_decode($json);
+        return new Player($object->name, $object->id);
+    }
 }

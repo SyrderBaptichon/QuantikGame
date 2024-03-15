@@ -52,7 +52,7 @@ function getPageHome() :string
 
 }
 
-function getPartiesTerminees()
+function getPartiesTerminees():string
 {
     $contenu = '<p><form action="traiteFormQuantik.php" method="post">
         <fieldset><legend>Parties terminées</legend>';
@@ -86,7 +86,7 @@ function getParties1Joueur():string
     else {
         foreach ($games as $game) {
             $id = $game->gameID;
-            if ($game->gameStatus == 'waitingForPlayer' && ($game->couleursPlayers[0])->getName()!=$_SESSION['player'] && is_null($game->couleursPlayers[1])) {
+            if ($game->gameStatus == 'waitingForPlayer' && ($game->couleursPlayers[0])->getName()!=$_SESSION['player'] && !isset($game->couleursPlayers[1])) {
                 $contenu .= "<button type='submit' value=$id name='gameId'>Rejoindre</button>&nbsp;&nbsp;";
                 $contenu .= $game;
                 $contenu .= '<br/>';
@@ -104,6 +104,7 @@ function getPartiesEnCours() :string
 <fieldset><legend>Parties à jouer</legend>';
     require_once 'db.php';
     PDOQuantik::initPDO($_ENV['sgbd'],$_ENV['host'],$_ENV['database'],$_ENV['user'],$_ENV['password']);
+
     $games = PDOQuantik::getAllGameQuantikByPlayerName($_SESSION['player']);
     if(is_null($games)) $contenu = "rien";
     else {

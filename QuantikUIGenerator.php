@@ -87,7 +87,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
         for($i = 0; $i < $apq->count(); $i++) {
             $piece = $apq->getPieceQuantik($i);
             $buttonclass = self::getButtonClass($piece);
-            $chaine .= "<button class=\"buttonPiece\" class=" .$buttonclass."  type='submit' name='selectedPiece' value='$i'>$piece</button>";
+            $chaine .= '<button class="buttonPiece ' .$buttonclass.'"  type="submit" name="selectedPiece" value='.$i.'>'.$piece.'</button>';
         }
         $chaine.= "<input type='hidden' value='choisirPiece' name='action'/>\n";
 
@@ -120,6 +120,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
         $chaine.='</form>';
         return $chaine;
     }
+
 
     protected static function getFormBoutonAnnulerChoixPiece(): string
     {

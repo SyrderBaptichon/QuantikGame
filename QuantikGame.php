@@ -58,7 +58,7 @@ class QuantikGame extends AbstractGame
     public function nomCourant()
     {
         $tab = $this->couleursPlayers;
-        if (is_null($tab[$this->currentPlayer])) return 'un joueur';
+        if (!isset($tab[$this->currentPlayer])) return 'un joueur';
         return $tab[$this->currentPlayer]->getName();
     }
 
