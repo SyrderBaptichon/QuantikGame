@@ -58,7 +58,7 @@ class QuantikUIGenerator extends AbstractUIGenerator {
                 $buttonclass = self::getButtonClass($plateau->getPiece($i,$j));
                 $chaine.= '<button class="buttonPiece '.$buttonclass.'" type="submit" disabled >
                   '. $plateau->getPiece($i,$j)->__toString() .' 
-                </button>';;
+                </button>';
             }
             $chaine.='<br>';
         }
@@ -104,11 +104,12 @@ class QuantikUIGenerator extends AbstractUIGenerator {
             $chaine.="<tr>";
             for($j = 1; $j <= $plateau::$NBCOLS; $j++) {
                 $p = $plateau->getPiece($i, $j);
+                $buttonclass = self::getButtonClass($p);
                 $chaine.="<td>";
                 if($action->isValidePose($i, $j, $piece)) {
-                    $chaine.="<button class='buttonPiece has-background-success' type='submit' name='placePiece' value='$i,$j'>$p</button>";
+                    $chaine.="<button class='buttonPiece has-background-success $buttonclass' type='submit' name='placePiece' value='$i,$j'>$p</button>";
                 } else {
-                    $chaine.="<button class='buttonPiece' type='submit' disabled>$p</button>";
+                    $chaine.="<button class='buttonPiece $buttonclass' type='submit' disabled>$p</button>";
                 }
                 $chaine.="</td>";
             }

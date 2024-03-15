@@ -37,6 +37,8 @@ switch ($_SESSION['ETAT']){
 
     case 'choixPiece':
 
+        $chaine .="<h1 class ='titre'>fghj</h1>";
+
         $chaine .= QuantikUIGenerator::getPageSelectionPiece($_SESSION['UI'], $_SESSION['UI']->currentPlayer);
         break;
 
