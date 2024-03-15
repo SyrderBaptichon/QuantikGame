@@ -3,7 +3,7 @@ class AbstractUIGenerator{
 
     public static function getDebutHTML(String $title="Jeu Quantik"): String{
         $chaine="<!DOCTYPE html>
-                    <html>
+                    <html class='no-js' lang='fr' dir='ltr' style='background-color: #cac5c5;'>
                     <head>
                         <meta charset=\"utf-8\">
                         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
