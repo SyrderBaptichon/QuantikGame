@@ -1,1 +1,30 @@
-.env
+# Environment variables (contains passwords)
+.env.local
+.env.production
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PHP
+vendor/
+composer.phar
+*.log
+
+# Docker volumes (local development)
+postgres_data/
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# Session files
+sessions/
