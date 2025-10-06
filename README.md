@@ -89,7 +89,7 @@ project-quantik/
 
 ## License
 
-[Your License Here]
+This project is licensed under the MIT License.
 
 ## Support
 
