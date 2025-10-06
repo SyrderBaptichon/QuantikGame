@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: quantik_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: quantik
+      POSTGRES_USER: quantik_user
+      POSTGRES_PASSWORD: quantik_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/quantik.sql:/docker-entrypoint-initdb.d/quantik.sql
+    networks:
+      - quantik_network
+
+  # PHP with Apache
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quantik_php
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - postgres
+    networks:
+      - quantik_network
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
+
+networks:
+  quantik_network:
+    driver: bridge

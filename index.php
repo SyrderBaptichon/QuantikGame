@@ -145,6 +145,7 @@ function getPartiesEnCours() :string
     return $contenu;
 }
 
+
 if(!isset($_SESSION['ETAT'])){
     $_SESSION['ETAT'] = "login";
 }

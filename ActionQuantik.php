@@ -1,6 +1,6 @@
 <?php
 class ActionQuantik {
-    protected $plateau;
+    protected PlateauQuantik $plateau;
 
     public function __construct(PlateauQuantik $lePlateau)
     {
@@ -56,13 +56,14 @@ class ActionQuantik {
     private static function isComboWin(ArrayPieceQuantik $tab) :bool
     {
         for($i=0; $i<count($tab);$i++){
+            $somme = 0;
             $somme+=$tab[$i]->getForme();
         }
         if($somme==10)return true;
         else return false;
     }
 
-    private static function isPieceValide(ArrayPieceQuantik $pieces, PieceQuantik $p)
+    private static function isPieceValide(ArrayPieceQuantik $pieces, PieceQuantik $p) : bool
     {
         for($i=0; $i<count($pieces);$i++){
             if($p->getForme() == $pieces[$i]->getForme() && $p->getCouleur() != $pieces[$i]->getCouleur())

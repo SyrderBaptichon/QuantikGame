@@ -58,7 +58,7 @@ if (isset($_POST['action'])) {
             PDOQuantik::initPDO($_ENV['sgbd'],$_ENV['host'],$_ENV['database'],$_ENV['user'],$_ENV['password']);
             $_SESSION['ETAT'] = "home";
             $_SESSION['player'] = $_POST['playerName'];
-            echo $_SESSION['player'];
+            // echo $_SESSION['player'];
             $player = PDOQuantik::selectPlayerByName($_SESSION['player']);
             if (is_null($player))
                 $player = PDOQuantik::createPlayer($_SESSION['player']);

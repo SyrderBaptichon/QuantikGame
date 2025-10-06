@@ -46,7 +46,6 @@ class QuantikUIGenerator extends AbstractUIGenerator {
                     break;
             }
         }
-
         return $buttonClass;
     }
 

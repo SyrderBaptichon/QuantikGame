@@ -29,10 +29,13 @@ class QuantikGame extends AbstractGame
         $json .= ',"currentPlayer":' . $this->currentPlayer;
         $json .= ',"gameID":' . $this->gameID;
         $json .= ',"gameStatus":' . json_encode($this->gameStatus);
-        if (is_null($this->couleursPlayers[1]))
+
+        // Check if second player exists
+        if (!isset($this->couleursPlayers[1]) || is_null($this->couleursPlayers[1]))
             $json .= ',"couleursPlayers":[' . $this->couleursPlayers[0]->getJson() . ']';
         else
             $json .= ',"couleursPlayers":[' . $this->couleursPlayers[0]->getJson() . ',' . $this->couleursPlayers[1]->getJson() . ']';
+
         return $json . '}';
     }
     public static function initQuantikGame(string $json): QuantikGame
